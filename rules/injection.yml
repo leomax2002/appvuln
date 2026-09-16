@@ -1,0 +1,35 @@
+rules:  
+  # ---------------------------------------------
+
+  # SQL Injection
+
+  # ---------------------------------------------
+
+  - id: python-sql-injection-pattern
+
+    languages:
+
+      - python
+
+
+    message: "Possível SQL Injection: consulta construída dinamicamente."
+
+    severity: ERROR
+
+
+    patterns:
+
+      - pattern-either:
+
+          - pattern: $DB.execute($QUERY)
+
+          - pattern: $CURSOR.execute($QUERY)
+
+          - pattern: $DB.executemany($QUERY, ...)
+
+
+      - metavariable-regex:
+
+          metavariable: $QUERY
+
+          regex: ".*\\+.*"
