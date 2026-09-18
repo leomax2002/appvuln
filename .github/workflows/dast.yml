@@ -45,7 +45,6 @@ jobs:
             -v "${{ github.workspace }}:/tmp" \
             ghcr.io/sullo/nikto:2.6.1 \
             -h http://localhost:3000 \
-            -Format htm \
             -output /tmp/nikto-report.html
 
       - name: Nuclei (falhas conhecidas)
