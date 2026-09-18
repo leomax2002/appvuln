@@ -14,16 +14,38 @@ jobs:
       - name: Subir aplicacao
         run: |
           docker build -t nikto-vulnerable .
+
           docker run -d \
             --name nikto-vuln \
             -p 3000:3000 \
             nikto-vulnerable
 
-          sleep 30
+      - name: Aguardar aplicacao
+        run: |
+          for i in {1..30}; do
+            if curl --fail --silent http://localhost:3000 > /dev/null; then
+              echo "Aplicacao disponivel"
+              exit 0
+            fi
+
+            echo "Aguardando aplicacao..."
+            sleep 2
+          done
+
+          echo "ERRO: aplicacao nao iniciou"
+          docker logs nikto-vuln
+          exit 1
 
       - name: Nikto (higiene do servidor)
         run: |
-          nikto -h http://localhost:3000 -Format htm \
+          docker pull hackllc/nikto:latest
+
+          docker run --rm \
+            --network host \
+            -v "${{ github.workspace }}:/tmp" \
+            hackllc/nikto:latest \
+            -h http://localhost:3000 \
+            -Format htm \
             -output /tmp/nikto-report.html
 
       - name: Nuclei (falhas conhecidas)
