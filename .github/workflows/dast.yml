@@ -38,12 +38,12 @@ jobs:
 
       - name: Nikto (higiene do servidor)
         run: |
-          docker pull hackllc/nikto:latest
+          docker pull ghcr.io/sullo/nikto:2.6.1
 
           docker run --rm \
             --network host \
             -v "${{ github.workspace }}:/tmp" \
-            hackllc/nikto:latest \
+            ghcr.io/sullo/nikto:2.6.1 \
             -h http://localhost:3000 \
             -Format htm \
             -output /tmp/nikto-report.html
