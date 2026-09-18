@@ -38,14 +38,16 @@ jobs:
 
       - name: Nikto (higiene do servidor)
         run: |
-          docker pull ghcr.io/sullo/nikto:2.6.1
+          mkdir -p "${{ github.workspace }}/nikto-output"
 
           docker run --rm \
+            --user root \
             --network host \
-            -v "${{ github.workspace }}:/tmp" \
+            -v "${{ github.workspace }}/nikto-output:/tmp" \
             ghcr.io/sullo/nikto:2.6.1 \
             -h http://localhost:3000 \
-            -output /tmp/nikto-report.html
+            -Format htm \
+            -output /tmp/nikto-report
 
       - name: Nuclei (falhas conhecidas)
         uses: projectdiscovery/nuclei-action@main
