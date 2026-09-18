@@ -23,11 +23,7 @@ jobs:
 
       - name: Nikto (higiene do servidor)
         run: |
-          docker run --rm \
-            --network host \
-            sullo/nikto \
-            -h http://localhost:3000 \
-            -Format htm \
+          nikto -h http://localhost:3000 -Format htm \
             -output /tmp/nikto-report.html
 
       - name: Nuclei (falhas conhecidas)
